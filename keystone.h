@@ -56,6 +56,10 @@ struct enclave
   struct utm* utm;
   struct epm* epm;
   bool is_init;
+  
+  /* define optional policy */
+  uint64_t instr_per_epoch;
+  uint64_t cycles_per_epoch;
 };
 
 

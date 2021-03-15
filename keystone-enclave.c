@@ -59,6 +59,8 @@ struct enclave* create_enclave(unsigned long min_pages)
 {
   struct enclave* enclave;
 
+  printk("In keystone driver: keystone-enclave: create_enclave\n");
+
   enclave = kmalloc(sizeof(struct enclave), GFP_KERNEL);
   if (!enclave){
     keystone_err("failed to allocate enclave struct\n");
@@ -68,6 +70,8 @@ struct enclave* create_enclave(unsigned long min_pages)
   enclave->eid = -1;
   enclave->utm = NULL;
   enclave->close_on_pexit = 1;
+  enclave->instr_per_epoch = 0;
+  enclave->cycles_per_epoch = 0;
 
   enclave->epm = kmalloc(sizeof(struct epm), GFP_KERNEL);
   enclave->is_init = true;

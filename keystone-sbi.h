@@ -34,6 +34,10 @@ struct keystone_sbi_create_t
 
   // Parameters
   struct runtime_params_t params;
+
+  /* define optional policy */
+  uint64_t instr_per_epoch;
+  uint64_t cycles_per_epoch;
 };
 
 struct sbiret sbi_sm_create_enclave(struct keystone_sbi_create_t* args);

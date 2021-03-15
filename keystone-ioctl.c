@@ -15,6 +15,8 @@ int keystone_create_enclave(struct file *filep, unsigned long arg)
   /* create parameters */
   struct keystone_ioctl_create_enclave *enclp = (struct keystone_ioctl_create_enclave *) arg;
 
+  printk("In keystone driver: keystone-ioctl: keystone_create_enclave\n");
+
   struct enclave *enclave;
   enclave = create_enclave(enclp->min_pages);
 
@@ -31,6 +33,10 @@ int keystone_create_enclave(struct file *filep, unsigned long arg)
 
   filep->private_data = (void *) enclp->eid;
 
+  /* allocate policy */
+  enclp->instr_per_epoch = enclave->instr_per_epoch;
+  enclp->cycles_per_epoch = enclave->cycles_per_epoch;
+
   return 0;
 }
 
@@ -45,6 +51,9 @@ int keystone_finalize_enclave(unsigned long arg)
   struct keystone_ioctl_create_enclave *enclp = (struct keystone_ioctl_create_enclave *) arg;
 
   enclave = get_enclave_by_id(enclp->eid);
+
+  printk("In keystone driver: keystone-ioctl: keystone_finalize_enclave\n");
+
   if(!enclave) {
     keystone_err("invalid enclave id\n");
     return -EINVAL;
@@ -72,6 +81,10 @@ int keystone_finalize_enclave(unsigned long arg)
   create_args.free_paddr = enclp->free_paddr;
 
   create_args.params = enclp->params;
+
+  /* set policy */
+  create_args.instr_per_epoch = enclp->instr_per_epoch;
+  create_args.cycles_per_epoch = enclp->cycles_per_epoch;
 
   ret = sbi_sm_create_enclave(&create_args);
 
@@ -235,6 +248,10 @@ long keystone_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
 
   if (copy_from_user(data,(void __user *) arg, ioc_size))
     return -EFAULT;
+
+  printk("In keystone driver: keystone-ioctl: keystone_ioctl");
+  printk("In keystone driver: keystone-ioctl: command: %lu", cmd);
+
 
   switch (cmd) {
     case KEYSTONE_IOC_CREATE_ENCLAVE:
