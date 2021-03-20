@@ -260,8 +260,8 @@ long keystone_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
   printk("Arg: %lu", arg);
   printk("ioc size: %lu", ioc_size);
 
-  //if (copy_from_user(data,(void __user *) arg, ioc_size))
-    // return -EFAULT;
+  if (copy_from_user(data,(void __user *) arg, ioc_size))
+    return -EFAULT;
 
   // ret = copy_from_user(data,(void __user *) arg, ioc_size);
 
