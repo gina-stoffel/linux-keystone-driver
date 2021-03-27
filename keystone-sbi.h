@@ -32,6 +32,9 @@ struct keystone_sbi_create_t
   uintptr_t user_paddr;
   uintptr_t free_paddr;
 
+  // policy registration
+  uint64_t cycles_per_epoch;
+
   // Parameters
   struct runtime_params_t params;
 };
