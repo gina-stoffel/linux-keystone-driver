@@ -245,8 +245,22 @@ long keystone_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
   ioc_size = _IOC_SIZE(cmd);
   ioc_size = ioc_size > sizeof(data) ? sizeof(data) : ioc_size;
 
+  printk("Is the size of data correct?\n");
+  printk("ioc si: %lu, and size of data: %lu \n", (unsigned long)ioc_size, (unsigned long)sizeof(data));
+
   if (copy_from_user(data,(void __user *) arg, ioc_size))
     return -EFAULT;
+
+  printk("ioctl: command: %u \n", cmd);
+
+  printk("Prints of differen enclaves:\n");
+  printk("Creating: %lu \n finalizing: %lu \n Running: %lu \n UTM init: %lu \n destroy: %lu\n", (unsigned long)KEYSTONE_IOC_CREATE_ENCLAVE, (unsigned long)KEYSTONE_IOC_FINALIZE_ENCLAVE, (unsigned long)KEYSTONE_IOC_RUN_ENCLAVE, (unsigned long)KEYSTONE_IOC_UTM_INIT, (unsigned long)KEYSTONE_IOC_DESTROY_ENCLAVE);
+
+  if (cmd == 2156438528) {
+    cmd = 2156962816;
+  }
+  printk("ioctl: command after altering: %u \n", cmd);
+
 
   switch (cmd) {
     case KEYSTONE_IOC_CREATE_ENCLAVE:
@@ -254,6 +268,7 @@ long keystone_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
       ret = keystone_create_enclave(filep, (unsigned long) data);
       break;
     case KEYSTONE_IOC_FINALIZE_ENCLAVE:
+      printk("ioctl: finalizing enclave\n");
       ret = keystone_finalize_enclave((unsigned long) data);
       break;
     case KEYSTONE_IOC_DESTROY_ENCLAVE:
@@ -271,6 +286,7 @@ long keystone_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
      * that ends up with an illegal instruction if we combine switch-case and if statements.
      * We didn't identified the exact problem, so we'll have these until we figure out */
     case KEYSTONE_IOC_UTM_INIT:
+      printk("ioctl: ioc utm init\n");
       ret = utm_init_ioctl(filep, (unsigned long) data);
       break;
     default:
