@@ -254,12 +254,8 @@ long keystone_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
   printk("ioctl: command: %u \n", cmd);
 
   printk("Prints of differen enclaves:\n");
-  printk("Creating: %lu \n finalizing: %lu \n Running: %lu \n UTM init: %lu \n destroy: %lu\n", (unsigned long)KEYSTONE_IOC_CREATE_ENCLAVE, (unsigned long)KEYSTONE_IOC_FINALIZE_ENCLAVE, (unsigned long)KEYSTONE_IOC_RUN_ENCLAVE, (unsigned long)KEYSTONE_IOC_UTM_INIT, (unsigned long)KEYSTONE_IOC_DESTROY_ENCLAVE);
+  printk("[driver]Creating: %lu \n finalizing: %lu \n Running: %lu \n UTM init: %lu \n destroy: %lu\n", (unsigned long)KEYSTONE_IOC_CREATE_ENCLAVE, (unsigned long)KEYSTONE_IOC_FINALIZE_ENCLAVE, (unsigned long)KEYSTONE_IOC_RUN_ENCLAVE, (unsigned long)KEYSTONE_IOC_UTM_INIT, (unsigned long)KEYSTONE_IOC_DESTROY_ENCLAVE);
 
-  if (cmd == 2156438528) {
-    cmd = 2156962816;
-  }
-  printk("ioctl: command after altering: %u \n", cmd);
 
 
   switch (cmd) {
