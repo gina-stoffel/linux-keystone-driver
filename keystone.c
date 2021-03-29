@@ -45,6 +45,7 @@ int keystone_mmap(struct file* filp, struct vm_area_struct *vma)
   vaddr_t paddr;
   enclave = get_enclave_by_id((unsigned long) filp->private_data);
   if(!enclave) {
+    printk("in keystone mmap\n");
     keystone_err("invalid enclave id\n");
     return -EINVAL;
   }
@@ -89,6 +90,9 @@ static int __init keystone_dev_init(void)
   keystone_dev.this_device->coherent_dma_mask = DMA_BIT_MASK(32);
 
   pr_info("keystone_enclave: " DRV_DESCRIPTION " v" DRV_VERSION "\n");
+
+  printk("[keystone driver] at the end of dev init\n");
+
   return ret;
 }
 

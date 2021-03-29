@@ -46,6 +46,8 @@ int keystone_finalize_enclave(unsigned long arg)
 
   enclave = get_enclave_by_id(enclp->eid);
   if(!enclave) {
+    printk("In finalizing enclave, eid: %lu \n", enclp->eid);
+
     keystone_err("invalid enclave id\n");
     return -EINVAL;
   }
@@ -101,10 +103,14 @@ int keystone_run_enclave(unsigned long data)
   struct enclave* enclave;
   struct keystone_ioctl_run_enclave *arg = (struct keystone_ioctl_run_enclave*) data;
 
+  printk("These args are given: eid: %llu, value: %llu \n", (uint64_t)arg->eid, (uint64_t)arg->value);
+
   ueid = arg->eid;
   enclave = get_enclave_by_id(ueid);
 
   if (!enclave) {
+    printk("In runing enclave, failing, eid: %lu\n", ueid);
+
     keystone_err("invalid enclave id\n");
     return -EINVAL;
   }
@@ -133,6 +139,8 @@ int utm_init_ioctl(struct file *filp, unsigned long arg)
   enclave = get_enclave_by_id(enclp->eid);
 
   if(!enclave) {
+    printk("In utm init ioctl\n");
+
     keystone_err("invalid enclave id\n");
     return -EINVAL;
   }
@@ -174,6 +182,7 @@ int __keystone_destroy_enclave(unsigned int ueid)
   enclave = get_enclave_by_id(ueid);
 
   if (!enclave) {
+    printk("before destroy enclave\n");
     keystone_err("invalid enclave id\n");
     return -EINVAL;
   }
@@ -205,6 +214,7 @@ int keystone_resume_enclave(unsigned long data)
 
   if (!enclave)
   {
+    printk("before resume enclave\n");
     keystone_err("invalid enclave id\n");
     return -EINVAL;
   }
@@ -240,6 +250,7 @@ long keystone_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
 
   switch (cmd) {
     case KEYSTONE_IOC_CREATE_ENCLAVE:
+      printk("ioctl: creating enclave\n");
       ret = keystone_create_enclave(filep, (unsigned long) data);
       break;
     case KEYSTONE_IOC_FINALIZE_ENCLAVE:
@@ -249,6 +260,7 @@ long keystone_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
       ret = keystone_destroy_enclave(filep, (unsigned long) data);
       break;
     case KEYSTONE_IOC_RUN_ENCLAVE:
+      printk("ioctl: running enclave\n");
       ret = keystone_run_enclave((unsigned long) data);
       break;
     case KEYSTONE_IOC_RESUME_ENCLAVE:
