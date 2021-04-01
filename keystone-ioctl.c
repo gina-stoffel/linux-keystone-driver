@@ -46,8 +46,6 @@ int keystone_finalize_enclave(unsigned long arg)
 
   enclave = get_enclave_by_id(enclp->eid);
   if(!enclave) {
-    printk("In finalizing enclave, eid: %lu \n", enclp->eid);
-
     keystone_err("invalid enclave id\n");
     return -EINVAL;
   }
@@ -103,14 +101,10 @@ int keystone_run_enclave(unsigned long data)
   struct enclave* enclave;
   struct keystone_ioctl_run_enclave *arg = (struct keystone_ioctl_run_enclave*) data;
 
-  printk("These args are given: eid: %llu, value: %llu \n", (uint64_t)arg->eid, (uint64_t)arg->value);
-
   ueid = arg->eid;
   enclave = get_enclave_by_id(ueid);
 
   if (!enclave) {
-    printk("In runing enclave, failing, eid: %lu\n", ueid);
-
     keystone_err("invalid enclave id\n");
     return -EINVAL;
   }
@@ -139,8 +133,6 @@ int utm_init_ioctl(struct file *filp, unsigned long arg)
   enclave = get_enclave_by_id(enclp->eid);
 
   if(!enclave) {
-    printk("In utm init ioctl\n");
-
     keystone_err("invalid enclave id\n");
     return -EINVAL;
   }
@@ -182,7 +174,6 @@ int __keystone_destroy_enclave(unsigned int ueid)
   enclave = get_enclave_by_id(ueid);
 
   if (!enclave) {
-    printk("before destroy enclave\n");
     keystone_err("invalid enclave id\n");
     return -EINVAL;
   }
@@ -214,7 +205,6 @@ int keystone_resume_enclave(unsigned long data)
 
   if (!enclave)
   {
-    printk("before resume enclave\n");
     keystone_err("invalid enclave id\n");
     return -EINVAL;
   }
@@ -245,33 +235,29 @@ long keystone_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
   ioc_size = _IOC_SIZE(cmd);
   ioc_size = ioc_size > sizeof(data) ? sizeof(data) : ioc_size;
 
-  printk("Is the size of data correct?\n");
-  printk("ioc si: %lu, and size of data: %lu \n", (unsigned long)ioc_size, (unsigned long)sizeof(data));
+  printk("[driver]Is the size of data correct?\n");
+  printk("[driver]ioc si: %lu, and size of data: %lu \n", (unsigned long)ioc_size, (unsigned long)sizeof(data));
 
   if (copy_from_user(data,(void __user *) arg, ioc_size))
     return -EFAULT;
 
-  printk("ioctl: command: %u \n", cmd);
 
-  printk("Prints of differen enclaves:\n");
-  printk("[driver]Creating: %lu \n finalizing: %lu \n Running: %lu \n UTM init: %lu \n destroy: %lu\n", (unsigned long)KEYSTONE_IOC_CREATE_ENCLAVE, (unsigned long)KEYSTONE_IOC_FINALIZE_ENCLAVE, (unsigned long)KEYSTONE_IOC_RUN_ENCLAVE, (unsigned long)KEYSTONE_IOC_UTM_INIT, (unsigned long)KEYSTONE_IOC_DESTROY_ENCLAVE);
-
-
+  //printk("[driver]Creating: %lu \n finalizing: %lu \n Running: %lu \n UTM init: %lu \n destroy: %lu\n", (unsigned long)KEYSTONE_IOC_CREATE_ENCLAVE, (unsigned long)KEYSTONE_IOC_FINALIZE_ENCLAVE, (unsigned long)KEYSTONE_IOC_RUN_ENCLAVE, (unsigned long)KEYSTONE_IOC_UTM_INIT, (unsigned long)KEYSTONE_IOC_DESTROY_ENCLAVE);
 
   switch (cmd) {
     case KEYSTONE_IOC_CREATE_ENCLAVE:
-      printk("ioctl: creating enclave\n");
+      printk("[driver]ioctl: creating enclave\n");
       ret = keystone_create_enclave(filep, (unsigned long) data);
       break;
     case KEYSTONE_IOC_FINALIZE_ENCLAVE:
-      printk("ioctl: finalizing enclave\n");
+      printk("[driver]ioctl: finalizing enclave\n");
       ret = keystone_finalize_enclave((unsigned long) data);
       break;
     case KEYSTONE_IOC_DESTROY_ENCLAVE:
       ret = keystone_destroy_enclave(filep, (unsigned long) data);
       break;
     case KEYSTONE_IOC_RUN_ENCLAVE:
-      printk("ioctl: running enclave\n");
+      printk("[driver]ioctl: running enclave\n");
       ret = keystone_run_enclave((unsigned long) data);
       break;
     case KEYSTONE_IOC_RESUME_ENCLAVE:
@@ -282,7 +268,7 @@ long keystone_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
      * that ends up with an illegal instruction if we combine switch-case and if statements.
      * We didn't identified the exact problem, so we'll have these until we figure out */
     case KEYSTONE_IOC_UTM_INIT:
-      printk("ioctl: ioc utm init\n");
+      printk("[driver]ioctl: ioc utm init\n");
       ret = utm_init_ioctl(filep, (unsigned long) data);
       break;
     default:

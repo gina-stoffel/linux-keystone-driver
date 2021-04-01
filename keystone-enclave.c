@@ -118,7 +118,6 @@ struct enclave* get_enclave_by_id(unsigned int ueid)
 {
   struct enclave* enclave;
   mutex_lock(&idr_enclave_lock);
-  printk("before finding eid: %u \n", ueid);
   enclave = idr_find(&idr_enclave, ueid);
   mutex_unlock(&idr_enclave_lock);
   return enclave;
