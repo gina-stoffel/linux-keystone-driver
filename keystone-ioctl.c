@@ -73,6 +73,7 @@ int keystone_finalize_enclave(unsigned long arg)
 
   create_args.params = enclp->params;
 
+  printk("[driver]requesting %lu cycles\n", enclp->cycles_per_epoch);
   create_args.cycles_per_epoch = enclp->cycles_per_epoch;
 
   ret = sbi_sm_create_enclave(&create_args);
@@ -235,8 +236,8 @@ long keystone_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
   ioc_size = _IOC_SIZE(cmd);
   ioc_size = ioc_size > sizeof(data) ? sizeof(data) : ioc_size;
 
-  printk("[driver]Is the size of data correct?\n");
-  printk("[driver]ioc si: %lu, and size of data: %lu \n", (unsigned long)ioc_size, (unsigned long)sizeof(data));
+  //printk("[driver]Is the size of data correct?\n");
+  //printk("[driver]ioc si: %lu, and size of data: %lu \n", (unsigned long)ioc_size, (unsigned long)sizeof(data));
 
   if (copy_from_user(data,(void __user *) arg, ioc_size))
     return -EFAULT;
