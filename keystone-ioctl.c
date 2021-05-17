@@ -75,6 +75,7 @@ int keystone_finalize_enclave(unsigned long arg)
 
   printk("[driver]requesting %lu cycles\n", enclp->cycles_per_epoch);
   create_args.cycles_per_epoch = enclp->cycles_per_epoch;
+  create_args.yields_per_epoch = enclp->yields_per_epoch;
 
   ret = sbi_sm_create_enclave(&create_args);
 
@@ -247,18 +248,18 @@ long keystone_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
 
   switch (cmd) {
     case KEYSTONE_IOC_CREATE_ENCLAVE:
-      printk("[driver]ioctl: creating enclave\n");
+      //printk("[driver]ioctl: creating enclave\n");
       ret = keystone_create_enclave(filep, (unsigned long) data);
       break;
     case KEYSTONE_IOC_FINALIZE_ENCLAVE:
-      printk("[driver]ioctl: finalizing enclave\n");
+      //printk("[driver]ioctl: finalizing enclave\n");
       ret = keystone_finalize_enclave((unsigned long) data);
       break;
     case KEYSTONE_IOC_DESTROY_ENCLAVE:
       ret = keystone_destroy_enclave(filep, (unsigned long) data);
       break;
     case KEYSTONE_IOC_RUN_ENCLAVE:
-      printk("[driver]ioctl: running enclave\n");
+      //printk("[driver]ioctl: running enclave\n");
       ret = keystone_run_enclave((unsigned long) data);
       break;
     case KEYSTONE_IOC_RESUME_ENCLAVE:
@@ -269,7 +270,7 @@ long keystone_ioctl(struct file *filep, unsigned int cmd, unsigned long arg)
      * that ends up with an illegal instruction if we combine switch-case and if statements.
      * We didn't identified the exact problem, so we'll have these until we figure out */
     case KEYSTONE_IOC_UTM_INIT:
-      printk("[driver]ioctl: ioc utm init\n");
+      //printk("[driver]ioctl: ioc utm init\n");
       ret = utm_init_ioctl(filep, (unsigned long) data);
       break;
     default:

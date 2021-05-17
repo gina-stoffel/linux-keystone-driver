@@ -65,6 +65,7 @@ struct keystone_ioctl_create_enclave {
 
   // Used for policy
   uintptr_t cycles_per_epoch;
+  uintptr_t yields_per_epoch;
 };
 
 struct keystone_ioctl_run_enclave {

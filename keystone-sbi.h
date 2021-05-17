@@ -34,6 +34,7 @@ struct keystone_sbi_create_t
 
   // policy registration
   uintptr_t cycles_per_epoch;
+  uintptr_t yields_per_epoch;
 
   // Parameters
   struct runtime_params_t params;
