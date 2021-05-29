@@ -74,11 +74,8 @@ int keystone_finalize_enclave(unsigned long arg)
   create_args.params = enclp->params;
 
   // add policy params
-  // create_args.cycles_per_epoch = enclp->cycles_per_epoch;
-  // create_args.yields_per_epoch = enclp->yields_per_epoch;
-
-  create_args.cycles_per_epoch = 3;
-  create_args.yields_per_epoch = 3;
+  create_args.cycles_per_epoch = enclp->cycles_per_epoch;
+  create_args.yields_per_epoch = enclp->yields_per_epoch;
 
   ret = sbi_sm_create_enclave(&create_args);
 
